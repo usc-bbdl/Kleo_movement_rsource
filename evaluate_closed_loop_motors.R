@@ -79,6 +79,7 @@ get_time_from_index <- function(time, index_vector) {
   for(i in 1:length(index_vector)) {
     time_series <- c(time_series, index_vector[i])
   }
+  time_series
 }
 
 #combine three vectors to return as one vector
@@ -88,7 +89,7 @@ combine_vectors <- function(mask, positive_index_vector, negative_index_vector) 
   combine_vector[[1,1]] <- mask
   combine_vector[[2,1]] <- positive_index_vector
   combine_vector[[3,1]] <- negative_index_vector
-  combine
+  combine_vector
 }
 
 nonzero <- function(x) {
@@ -115,9 +116,9 @@ detect_changes_index <- function(unidimensional_timeseries) {
   #return true when there's changes(either going to negative or positive)
   mask <- mask_of_nonzeros_with_padding[seq(2,length(mask_of_nonzeros_with_padding)-1)]
   #return vector contains three different vectors 
-  return_vector <- combine_vectors(mask, positive_index_vector, negative_index_vector)
+  return_vector <- combine_vectors(mask, positive_index, negative_index)
 
-  browser()
+  #browser()
   return_vector
 }
 
@@ -129,7 +130,7 @@ detect_changes <- function(unidimensional_timeseries) {
   mask_of_nonzeros_with_padding <- do.call(c, lapply(difference_vector, nonzero))
   mask <- mask_of_nonzeros_with_padding[seq(2,length(mask_of_nonzeros_with_padding)-1)]
   mask
-  browser()
+  #browser()
 }
 #detect_change_to_1 <- function(unidimensional_timeseries) {
 #  list_of_start_indices <- c()
@@ -151,10 +152,12 @@ main <- function(filepath){
   pdf(paste0("JR3_forces",as.numeric(Sys.time()), ".pdf"), width=20, height=21)
   plot_JR3_data(subsampled_time_series)
   dev.off()
-  #detect_changes(time_series_measurements$reference_M0)
-  browser()
+  detect_changes_index(time_series_measurements$reference_M0)
+  #browser()
 }
 filenames_list <- c(
-  "C:/data/realTimeData2017_02_24_12_18_36.txt"
-  )
-lapply(filenames_list, main)
+    "test1.txt"
+    #"test.txt"
+    #"01_5h35_with_200_1.txt"
+)
+#lapply(filenames_list, main)
